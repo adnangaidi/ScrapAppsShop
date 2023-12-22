@@ -130,14 +130,6 @@ public function desc_app($url,$app_id)
     $result = json_decode($res, true);
     Log::info($result);
 
-    // if ($app) {
-    //     $app=$app;
-    // }else{
-    //     return response()->json([
-    //         'message' => 'App not found for the given description.',
-    //     ], 404);
-    // }
-
     $desc_app = new Description();
     $desc_app->title = $result['title'];
     $desc_app->body = $result['body'];
@@ -156,8 +148,6 @@ public function desc_app($url,$app_id)
     $res = shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/script_tarif_app.py" "' . $url . '"');
     $result = json_decode($res, true);
     Log::info(count($result));
-
-    
 
     for ($i = 0; $i < count($result); $i++) {
         $tarif_app = new Tarif();
@@ -181,12 +171,5 @@ public function desc_app($url,$app_id)
 
 
     
-    public function deleteE(){
-        DB::table('media')->truncate();
-        DB::table('apps')->truncate();
-        DB::table('tarifs')->truncate();
-        DB::table('descriptions')->truncate();
-
-        return 'data delete with success';
-    }
+    
 }
