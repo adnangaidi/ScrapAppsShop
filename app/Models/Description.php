@@ -10,10 +10,11 @@ class Description extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'desc_id',
         'title',
         'body',
         'role',
-
+        'app_id'
     ];
 
     public function app(): BelongsTo

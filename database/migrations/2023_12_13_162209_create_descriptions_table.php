@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('body')->nullable();
             $table->text('role')->nullable();
             $table->unsignedBigInteger('app_id');
-            $table->foreign('app_id')->references('app_id')->on('apps');
+            $table->foreign('app_id')->references('app_id')->on('apps')->cascadeOnDelete();
             $table->timestamps();
         });
     }

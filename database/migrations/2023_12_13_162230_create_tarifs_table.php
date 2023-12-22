@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('tarifs', function (Blueprint $table) {
             $table->id('tarif_id');
-            $table->string('basic');
-            $table->string('price_advanced'); 
-            $table->string('price_plus');
+
+            $table->string('name')->nullable();
+            $table->string('price')->nullable();
+            $table->string('plan')->nullable();
+            
             $table->unsignedBigInteger('app_id');
-            $table->foreign('app_id')->references('app_id')->on('apps');
+            $table->foreign('app_id')->references('app_id')->on('apps')->cascadeOnDelete();
             $table->timestamps();
         });
     }

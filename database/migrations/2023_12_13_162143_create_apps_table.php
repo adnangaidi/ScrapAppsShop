@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('apps', function (Blueprint $table) {
             $table->id('app_id');
-            $table->string('name');
-            $table->string('logo');
-            $table->json('images');
-            $table->string('developer');
-            $table->string('data_created');
-            $table->json('langue');
-            $table->json('categories');
+            $table->string('name')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('video')->nullable();
+            $table->string('developer')->nullable();
+            $table->string('nb_review')->nullable();
+            $table->string('date_created')->nullable();
+            $table->string('langue')->nullable();
+            $table->json('categories')->nullable();
             $table->timestamps();
         });
     }

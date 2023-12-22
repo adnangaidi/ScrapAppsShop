@@ -18,6 +18,7 @@ class Review extends Model
         'used_period',
         'reply',
         'date_reply',
+        'app_id'
     ];
 
     public function app(): BelongsTo

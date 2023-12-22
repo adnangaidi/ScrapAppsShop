@@ -13,4 +13,7 @@ class ExampleTest extends TestCase
     {
         $this->assertTrue(true);
     }
+    public function test_gama_is_not_alpha(){
+        $this->markTestIncomplete('must be completed');
+    }
 }

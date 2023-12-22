@@ -6,23 +6,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-class App extends Model
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+class App extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory,InteractsWithMedia;
+    protected $table = 'apps';
+    protected $primaryKey = 'app_id';
+    public $timestamps = true;
     protected $fillable = [
         'app_id',
         'name',
         'logo',
-        'images',
+        'video',
         'developer',
-        'data_created',
+        'date_created',
+        'nb_review',
         'langue',
-        'categories',
+        'categories', 
     ];
 
-    public function decription(): HasOne
+    public function decription(): HasMany
     {
-        return $this->hasOne(Description::class);
+        return $this->hasMany(Description::class,'app_id');
     }
 
     public function review(): HasMany
@@ -30,9 +36,9 @@ class App extends Model
         return $this->HasMany(Review::class);
     }
 
-    public function tarif(): HasOne
+    public function tarif(): HasMany
     {
-        return $this->hasOne(Tarif::class);
+        return $this->hasMany(Tarif::class,'app_id');
     }
     
 }

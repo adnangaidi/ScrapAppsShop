@@ -11,9 +11,10 @@ class Tarif extends Model
     use HasFactory;
     protected $fillable = [
         'tarif_id',
-        'basic',
-        'price_advanced',
-        'price_plus'
+        'name',
+        'price', 
+        'plan',
+        'app_id'
     ];
 
     public function app(): BelongsTo
