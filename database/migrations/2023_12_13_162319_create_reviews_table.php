@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id('review_id');
-            $table->string('store');
-            $table->string('contry');
-            $table->string('nb-start'); 
-            $table->string('date');
-            $table->string('used_period');
-            $table->text('reply');
-            $table->string('date_reply');
-            $table->unsignedBigInteger('app_id');
+            $table->string('store')->nullable();
+            $table->string('contry')->nullable();
+            $table->string('nb_start')->nullable(); 
+            $table->string('content')->nullable(); 
+            $table->string('date')->nullable();
+            $table->string('used_period')->nullable();
+            $table->string('reply')->nullable();
+            $table->string('date_reply')->nullable();
+            $table->unsignedBigInteger('app_id')->nullable();
             $table->foreign('app_id')->references('app_id')->on('apps');
             $table->timestamps();
         });

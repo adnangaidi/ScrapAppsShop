@@ -10,6 +10,7 @@ use App\Http\Resources\MediaResource;
 use App\Models\Tarif;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\UploadMediaRequest;
+use App\Models\Review;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +23,11 @@ use InteractsWithMedia;
 //call all functions scrap
     public function getdata(Request  $request)
     {
-        
+        set_time_limit(300);
     //for path the functipn app_path not work in this
         $url = $request->input('url');
+        
+
         $info=$this->info_app($url) ;
         try {
             Log::info($info->getStatusCode());
@@ -33,9 +36,9 @@ use InteractsWithMedia;
                 $app_id = App::where('name', $this->name)->value('app_id');
                 Log::info($app_id);
                 if ($app_id != null) {
-                    $this->desc_app($url,$app_id);
+                $this->desc_app($url,$app_id);
                 $this->tarif_app($url,$app_id);
-                // $this->rev_app($url);
+                $this->rev_app($this->removeQueryParams($url),$app_id);
                 }
                 else{
                     return 'the id of app is null';
@@ -162,14 +165,45 @@ public function desc_app($url,$app_id)
     ], 200);
 }
 
-    public function rev_app($url)
+    public function rev_app($url,$app_id)
     {
-          $res=shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/script_tarif_app.py" "' . $url . '"');
+        $res=shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/script_reviews.py" "' . $url . '"');
         $result = json_decode($res, true);
-        print_r($result[0]['plans'][0]) ; 
+        Log::info("result",$result);
+        for($i=0;$i<count($result);$i++){
+            $review_app = new Review();
+            $review_app->store = $result[$i]['store'];
+            $review_app->contry = $result[$i]['contry'];
+            $review_app->date = $result[$i]['date'];
+            $review_app->nb_start  = $result[$i]['num_start'];
+            $review_app->content  = $result[$i]['content'];
+            $review_app->used_period = $result[$i]['used_period'];
+            $review_app->reply = $result[$i]['reply'];
+            $review_app->date_reply = $result[$i]['date_reply'];
+            $review_app->app_id= $app_id;
+            $review_app->save();
+        }
     }
 
+    public function deleteE(){
+        DB::table('media')->truncate();
+        DB::table('apps')->truncate();
+        DB::table('tarifs')->truncate();
+        DB::table('descriptions')->truncate();
 
+        return 'data delete with success';
+    }
+    function removeQueryParams($url) {
+        $parsedUrl = parse_url($url);
     
+        if ($parsedUrl !== false) {
+            $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+            $host     = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+            $path     = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
     
+            return $scheme . $host . $path;
+        }
+    
+        return false;
+    }
 }
