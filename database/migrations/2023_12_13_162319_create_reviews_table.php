@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('reply')->nullable();
             $table->string('date_reply')->nullable();
             $table->unsignedBigInteger('app_id')->nullable();
-            $table->foreign('app_id')->references('app_id')->on('apps');
+            $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();
         });
     }

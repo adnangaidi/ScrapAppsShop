@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('plan')->nullable();
             
             $table->unsignedBigInteger('app_id');
-            $table->foreign('app_id')->references('app_id')->on('apps')->cascadeOnDelete();
+            $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();
         });
     }

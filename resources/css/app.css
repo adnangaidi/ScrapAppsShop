@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500&family=Jost:wght@700&family=Lora:wght@600&family=Varela+Round&display=swap');
+
+body{
+    background-color: white;
+    font-family: 'Lora', serif;
+}
+
+.btnPrimary {
+    @apply my-1 py-1 px-8 bg-indigo-600 font-semibold text-white rounded hover:bg-gray-400 transition-all duration-300
+}

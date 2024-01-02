@@ -21,12 +21,9 @@ class ScrapController extends Controller
 use InteractsWithMedia;
    public $name='';
 //call all functions scrap
-    public function getdata(Request  $request)
+    public function getdata($url )
     {
-        set_time_limit(300);
-    //for path the functipn app_path not work in this
-        $url = $request->input('url');
-        
+        set_time_limit(600);
 
         $info=$this->info_app($url) ;
         try {
@@ -63,8 +60,8 @@ use InteractsWithMedia;
          $info_app->developer   =$result['developer'];
          $info_app->nb_review   =$result['nombre_avis'];
          $info_app->date_created   =$result['date_created'];
-         $info_app->langue   =$result['langue'];
-         $info_app->categories   =is_array($result['cat']) ? implode(', ', $result['cat']) : $result['cat'];
+         $info_app->langue   =$result['langues'];
+         $info_app->categories   =is_array($result['catigorie']) ? implode(', ', $result['catigorie']) : $result['catigorie'];
          if ($result['link_logo']) {
             $media = collect($result['link_logo'])
                 ->map(function ($url_logo) use ($info_app) {
@@ -150,7 +147,8 @@ public function desc_app($url,$app_id)
 {
     $res = shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/script_tarif_app.py" "' . $url . '"');
     $result = json_decode($res, true);
-    Log::info(count($result));
+    if($result){
+        Log::info(count($result));
 
     for ($i = 0; $i < count($result); $i++) {
         $tarif_app = new Tarif();
@@ -159,6 +157,13 @@ public function desc_app($url,$app_id)
         $tarif_app->plan  = is_array($result[$i]['plans']) ? implode(', ', $result[$i]['plans']) : $result[$i]['plans'];
         $tarif_app->app_id= $app_id;
         $tarif_app->save();
+    }
+    }else{
+        Log::info("tarifs none.");
+
+        return response()->json([
+            'message' => 'tarifs none.',
+        ], 400);
     }
     return response()->json([
         'message' => 'Tarif saved successfully.',
@@ -190,10 +195,10 @@ public function desc_app($url,$app_id)
         DB::table('apps')->truncate();
         DB::table('tarifs')->truncate();
         DB::table('descriptions')->truncate();
-
+        DB::table('list_apps')->truncate();
         return 'data delete with success';
     }
-    function removeQueryParams($url) {
+    public function removeQueryParams($url) {
         $parsedUrl = parse_url($url);
     
         if ($parsedUrl !== false) {
@@ -206,4 +211,5 @@ public function desc_app($url,$app_id)
     
         return false;
     }
+  
 }
