@@ -1,21 +1,25 @@
 import { useState } from "react";
-import Header from "../Components/Header.jsx";
-import Footer from "../Components/Footer.jsx";
-import Main from "../Components/Main.jsx";
-import Slidebar from "../Components/Slidebar.jsx";
+import Header from "../Components/Shared/Header.jsx";
+import Footer from "../Components/Shared/Footer.jsx";
+import Main from "../Components/ComponentDefault/Main.jsx";
+import Banner from "../Components/ComponentDefault/Banner.jsx";
+import PropTypes from "prop-types";
 
 
-
-
-export default function Welcome() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+function Welcome({ auth, apps,categories}) {
     return (
         <>
-            <Header />
-            <Slidebar />
-            <Main />
+            <Header auth={auth}/>
+            <Banner />
+            <Main apps={apps} categories={categories} />
             <Footer />
         </>
     );
 }
+Welcome.propTypes = {
+    auth: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+    apps: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+    categories: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+};
+
+export default Welcome;

@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500&family=Jost:wght@700&family=Lora:wght@600&family=Varela+Round&display=swap');
 
 body{
-    background-color: white;
+    @apply bg-gray-50;
     font-family: 'Lora', serif;
 }
 

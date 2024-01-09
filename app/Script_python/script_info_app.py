@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import sys
+
 def scrape_info(url):
     response = requests.get(url)
 
@@ -53,30 +54,30 @@ def scrape_info(url):
             list_cat_double = [a_tag.text for element in cat for a_tag in element.find_all('a')]
         
             for item in list_cat_double:
-               if item not in list_cat:
-                  list_cat.append(item)
-            list_cat = [item.replace('\n', '') for item in list_cat]
-            list_cat = [ele.strip() for ele in list_cat]
+                # Remove 'Other' from categories
+                cleaned_item = item.replace('\n', '').strip()
+                if 'Other' in cleaned_item:
+                    cleaned_item = cleaned_item.replace(' - Other', '')
+                list_cat.append(cleaned_item)
 
             info = {
                 'name_app': app_name,
                 'developer': developer_name,
                 'link_logo': link_logo,
-                'nombre_avis': num_reviews,
+                'number_avis': num_reviews,
                 'date_created': result_string,
                 'langues': data,
-                'catigorie': list_cat
+                'categories': list_cat
             }
             return json.dumps(info)
 
     return None
 
 if __name__ == '__main__':
-   if len(sys.argv) > 1:
+    if len(sys.argv) > 1:
         url = sys.argv[1]
         result = scrape_info(url)
         if result:
-
-            print(result)
-        else:
-            print('Failed to scrape the website.')
+          print(result)
+    else:
+        print('Failed to scrape the website.')

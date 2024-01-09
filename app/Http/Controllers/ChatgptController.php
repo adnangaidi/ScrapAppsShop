@@ -29,7 +29,7 @@ class ChatgptController extends Controller
     }
     public function addata(){
         $data=[
-            'url'=>'https://apps.shopify.com/pinch-zoom?search_id=2c7cd58a-b322-415d-b75c-41108a88c8dc&surface_detail=video+gallery&surface_inter_position=1&surface_intra_position=25&surface_type=search',
+            'url'=>'https://apps.shopify.com/beacon?st_source=autocomplete',
             'status'=>'not scraped'
         ];
         $list_apps=new list_apps($data);

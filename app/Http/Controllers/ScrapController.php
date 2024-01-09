@@ -58,20 +58,35 @@ use InteractsWithMedia;
          $info_app->name   =$result['name_app'];
          $this->name=$result['name_app'];
          $info_app->developer   =$result['developer'];
-         $info_app->nb_review   =$result['nombre_avis'];
+         $info_app->nb_review   =$result['number_avis'];
          $info_app->date_created   =$result['date_created'];
          $info_app->langue   =$result['langues'];
-         $info_app->categories   =is_array($result['catigorie']) ? implode(', ', $result['catigorie']) : $result['catigorie'];
+         $info_app->categories   =is_array($result['categories']) ? implode(', ', $result['categories']) : $result['categories'];
          if ($result['link_logo']) {
             $media = collect($result['link_logo'])
                 ->map(function ($url_logo) use ($info_app) {
-                    $path = 'public/media/' . basename($url_logo);
-                    $info_app->logo=$path;
                     return $info_app->addMediaFromUrl($url_logo)->toMediaCollection('logo_app');
                 });
-                
+
              MediaResource::collection($media);
         }
+        $info_app->save();
+$id = $info_app->app_id;
+
+Log::info('id:', ['id' => $id]);
+
+$file = DB::table('media')->where('model_id', $id)->where('collection_name', 'logo_app')->first();
+
+if ($file) {
+    $idfile = $file->id;
+    $namefile = $file->file_name;
+    $path = "media/{$idfile}/{$namefile}";
+    Log::info($path);
+
+    $info_app->logo = $path;
+} else {
+    Log::info('File not found for model_id:', ['model_id' => $id]);
+}
         $this->image_app($url,$info_app);
         $info_app->save();
         }else
