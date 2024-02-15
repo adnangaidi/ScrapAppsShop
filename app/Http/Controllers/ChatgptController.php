@@ -27,13 +27,5 @@ class ChatgptController extends Controller
         print_r($result->choices[0]->message->content);
     
     }
-    public function addata(){
-        $data=[
-            'url'=>'https://apps.shopify.com/beacon?st_source=autocomplete',
-            'status'=>'not scraped'
-        ];
-        $list_apps=new list_apps($data);
-        $list_apps->save();
-        return 'data add with successfule';
-    }
+    
 }

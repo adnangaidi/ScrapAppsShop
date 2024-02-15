@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('list_apps', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
+            $table->string('url')->unique();
+            $table->string('categories')->nullable();
+            $table->string('subcategories')->nullable();
+            $table->string('subcategories1')->nullable();
             $table->string('status');
             $table->timestamps();
         });

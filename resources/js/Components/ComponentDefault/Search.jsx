@@ -1,30 +1,39 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { Inertia  } from "@inertiajs/inertia";
+import { Link } from '@inertiajs/react';
+export default function Search({ onSearchResult }) {
+  const [search, setSearch] = useState('');
 
-export default function Search() {
-  
-
+  useEffect(() => {
+    const searchTimer = setTimeout(() => {
+      onSearchResult(search);
+    }, 300); 
+    return () => clearTimeout(searchTimer); 
+  }, [search, onSearchResult]);
 
   return (
-    <>   
-      <div className="mx-auto md:h-20 md:w-1/2 mb-10 flex flex-1  ">
-              <form className="relative flex flex-1" action="#" method="GET">
+  
+                <div className="mx-auto  w-auto flex flex-1  ">
+              <form className="relative flex flex-1" >
                 <label htmlFor="search-field" className="sr-only">
-                  Search for shopify apps
+                  Search  apps
                 </label>
-                <MagnifyingGlassIcon
-                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 mt-1 text-gray-400"
-                  aria-hidden="true"
-                />
                 <input
                   id="search-field"
-                  className="block h-12 bg-gray-50 rounded-xl border-blue-500 w-full mt-5 pl-8 pr-0 text-gray-900 placeholder:text-gray-400  sm:text-sm"
-                  placeholder="Search for shopify apps"
+                  className="block w-56 bg-gray-50 rounded-xl border-blue-500   pl-8 pr-0 text-gray-900 placeholder:text-gray-400  sm:text-sm"
+                  placeholder="Search  apps"
                   type="search"
                   name="search"
+                  onChange={(e) => setSearch(e.target.value)}
                 />
+                  {/* <MagnifyingGlassIcon
+                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 mt-1 text-gray-400"
+                  aria-hidden="true"
+                /> */}
               </form>
+             
             </div>
-    </>
+
   )
 }

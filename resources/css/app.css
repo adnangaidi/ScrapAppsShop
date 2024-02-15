@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500&family=Jost:wght@700&family=Lora:wght@600&family=Varela+Round&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500&family=Jost:wght@700&family=Lora:wght@600&family=Varela+Round&display=swap'); */
 
 body{
     @apply bg-gray-50;
@@ -11,3 +11,10 @@ body{
 .btnPrimary {
     @apply my-1 py-1 px-8 bg-indigo-600 font-semibold text-white rounded hover:bg-gray-400 transition-all duration-300
 }
+.carousel-content {
+    /* display: flex; */
+    
+    transition: transform 0.5s ease-in-out;
+  }
+
+  /*style={{transform: `translateX(0.45%)`}}*/

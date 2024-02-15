@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ListAppsController;
+use App\Http\Controllers\ScrapCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ScrapController;
@@ -18,4 +20,6 @@ use App\Http\Controllers\ScrapController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/test', [ScrapController::class, 'test']);
+Route::get('/test', [ListAppsController::class,'CompileApps']);
+Route::get('/delete',[ScrapController::class,'deleteE']);
+

@@ -10,15 +10,19 @@ use Inertia\Inertia;
 
 
 
-Route::get('/',[HomeController::class,'getApps'])->name('apps.show');
-Route::get('/app/{appId}',[HomeController::class,'getApp'])->name('app.show');
+Route::get('/',[HomeController::class,'getApps'])->name('/');
+Route::get('/company/about', [HomeController::class,'about'])->name('apps.about');
+Route::get('/company/contact', [HomeController::class,'contact'])->name('apps.contact');
+Route::get('/categories/{category}', [HomeController::class,'getAppsWithCategory'])->name('category.show');
+Route::get('/subcategories/{subcategory}', [HomeController::class,'getAppsWithSubCategory'])->name('subcategory.show');
+// Route::get('/subcategories/{subcategory}', [HomeController::class,'getAppsWithSubCategory'])->name('subcategory.show');
+
+Route::get('/{slug}',[HomeController::class,'getApp'])->name('app.show');
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::inertia('/app/{appId}', 'SingleApp');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,8 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/test',[ChatgptController::class,'addata']);
-Route::get('test1',[HomeController::class,'getCategories']);
-Route::get('/delete',[ScrapController::class,'deleteE']);
+// Route::get('test1',[HomeController::class,'getCategories']);
+// Route::get('/delete',[ScrapController::class,'deleteE']);
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';

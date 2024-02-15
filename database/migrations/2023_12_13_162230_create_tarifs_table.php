@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('tarifs', function (Blueprint $table) {
             $table->id('tarif_id');
-
             $table->string('name')->nullable();
             $table->string('price')->nullable();
             $table->string('plan')->nullable();
-            
             $table->unsignedBigInteger('app_id');
             $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();

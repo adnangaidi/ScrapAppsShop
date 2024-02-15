@@ -20,7 +20,12 @@ return new class extends Migration
             $table->string('nb_review')->nullable();
             $table->string('date_created')->nullable();
             $table->string('langue')->nullable();
-            $table->json('categories')->nullable();
+            $table->string('categories')->nullable();
+            $table->string('subcategories')->nullable();
+            $table->string('subcategories1')->nullable();
+            $table->string('slug')->nullable();
+            $table->unsignedBigInteger('id')->nullable();
+            $table->foreign('id')->references('id')->on('list_apps')->onDelete('cascade');
             $table->timestamps();
         });
     }

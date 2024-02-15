@@ -19,7 +19,8 @@ def scrape_info(url):
         link_logo = section1.find('img', class_='tw-rounded-sm tw-block tw-w-full')['src']
 
         # Extracting Number of Reviews
-        num_reviews = section1.find('a', {'id': 'reviews-link'}).text.strip()
+        reviews_link = section1.find('a', {'id': 'reviews-link'})
+        num_reviews = reviews_link.text.strip() if reviews_link else None
 
         # Extracting Developer Name
         developer_name = section1.find('div', class_='tw-text-body-md').text.strip()

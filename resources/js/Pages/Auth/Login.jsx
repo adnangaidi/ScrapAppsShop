@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import Checkbox from '@/Components/Shared/Checkbox';
+import GuestLayout from '@/Layouts/Shared/GuestLayout';
+import InputError from '@/Components/Shared/InputError';
+import InputLabel from '@/Components/IShared/nputLabel';
+import PrimaryButton from '@/Components/Shared/PrimaryButton';
+import TextInput from '@/Components/Shared/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {

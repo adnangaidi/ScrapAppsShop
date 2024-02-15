@@ -7,18 +7,33 @@ import { Link } from '@inertiajs/react';
 
 
 
+
 export default function All_Apps({apps,categories}) {
     const[data]=useState(Object.keys(categories));
     const[search,setSearch]=useState('');
+    const [count, setCount] = useState(16);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    
+    function findApp(search, infoApps) {
+        const trimmedSearch = search.trim().toLowerCase(); 
+      
+        return infoApps.filter((app) => {
+          const appNameLowerCase = app.name.toLowerCase();
+      
+          if (trimmedSearch === '') {
+            return true;
+          }
+      
+          return appNameLowerCase.includes(trimmedSearch);
+        });
+      }
 
-    function findApp(search, infoApps){
-        return infoApps.filter((app)=>{
-          return search.toLowerCase()==='' ? app: app.name.toLowerCase().includes(search);
-        })
-    }
-console.log(search)
+      const handleSearch = () => {
+        const trimmedSearch = search.trim();
+        if (trimmedSearch !== '') {
+        }
+      };
     const categoryOptions = data
         ? data.map((key) => ({
               label: categories[key],
@@ -30,7 +45,7 @@ console.log(search)
         ? apps.map((app) => ({
               id: app["app_id"],
               name: app["name"],
-              href: `/${app["app_id"]}`,
+              href: `app/${app["app_id"]}`,
               num_review: app["nb_review"],
               description: "this is just test of our application",
               imageSrc: app["logo"],
@@ -47,25 +62,7 @@ console.log(search)
     ];
     return (
         <div className="bg-gray-50 mx-auto">
-                  <div className="mx-auto md:h-20 md:w-1/2 mb-10 flex flex-1  ">
-              <form className="relative flex flex-1" action="#" method="GET">
-                <label htmlFor="search-field" className="sr-only">
-                  Search for shopify apps
-                </label>
-                <MagnifyingGlassIcon
-                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 mt-1 text-gray-400"
-                  aria-hidden="true"
-                />
-                <input
-                  id="search-field"
-                  className="block h-12 bg-gray-50 rounded-xl border-blue-500 w-full mt-5 pl-8 pr-0 text-gray-900 placeholder:text-gray-400  sm:text-sm"
-                  placeholder="Search for shopify apps"
-                  type="search"
-                  name="search"
-                  onChange={(e)=>setSearch(e.target.value)}
-                />
-              </form>
-            </div>
+        
 
             <div>
                 {/* Mobile filter dialog */}
@@ -320,7 +317,7 @@ console.log(search)
                             </h2>
 
                             <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8 ">
-                                {filteredApps.map((app) => (
+                                {filteredApps.map((app,index) => (
                                     <Link
                                         key={app.id}
                                         href={app.href}
@@ -346,16 +343,13 @@ console.log(search)
                                     </Link>
                                 ))}
                             </div>
+      
                         </section>
                     </div>
+                    
 
             </div>
         </div>
     );
 }
    
-function findapp(app){
-    return filter((app)=>{
-      return search.toLowerCase()==='' ? app: app.name.toLowerCase().includes(search);
-    })
-}

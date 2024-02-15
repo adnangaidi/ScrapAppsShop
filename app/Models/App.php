@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
@@ -24,11 +25,17 @@ class App extends Model implements HasMedia
         'nb_review',
         'langue',
         'categories', 
+        'subcategories',
+        'subcategories1',
+        'slug',
+        'id'
     ];
-
+    public function listapps():BelongsTo{
+        return $this(list_apps::class);
+    }
     public function decription(): HasMany
     {
-        return $this->hasMany(Description::class,'app_id');
+        return $this->hasMany(Description::class);
     }
 
     public function review(): HasMany
@@ -38,7 +45,7 @@ class App extends Model implements HasMedia
 
     public function tarif(): HasMany
     {
-        return $this->hasMany(Tarif::class,'app_id');
+        return $this->hasMany(Tarif::class);
     }
     
 }
