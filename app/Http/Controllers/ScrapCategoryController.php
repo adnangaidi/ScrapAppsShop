@@ -11,10 +11,26 @@ use Illuminate\Support\Facades\Log;
 
 class ScrapCategoryController extends Controller
 {
+    public function getAllCategory(){
+        set_time_limit(0); 
+        $category = $this->CategoryParent();
+        if($category != false){
+            $subcategory=$this->FirstSubCategory();
+            if($subcategory != false){
+               $this->SecondSubCategory();
+            }
+
+        }
+        return response()->json(['the categories is save with successuful', 200]);
+    }
     //function extract category parent
     public function CategoryParent(){
         $url = "https://apps.shopify.com/";
-        $res=shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/categories/script_category.py" "' . $url . '"');
+        $path_script=storage_path('Script_python/categories/script_category.py');
+            if (!file_exists($path_script)) {
+                throw new \Exception("Python script not found at $path_script");
+            }
+        $res=shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
         $results = json_decode($res, true);
         foreach($results as $result){
             if(isset($result['name']) && isset($result['href'])){
@@ -25,11 +41,16 @@ class ScrapCategoryController extends Controller
             }
         }
         log::info("results",$results);
+        return true;
     }
     public function FirstSubCategory(){
         $category=CategoryParent::all();
         foreach($category as $cat){
-            $res=shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/categories/script_subcategory.py" "' . $cat['url'] . '"');
+            $path_script=storage_path('Script_python/categories/script_subcategory.py');
+            if (!file_exists($path_script)) {
+                throw new \Exception("Python script not found at $path_script");
+            }
+            $res=shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $cat['url'] . '"');
             $results = json_decode($res, true);
             foreach($results as $result){
                 if(isset($result['name']) && isset($result['href'])){
@@ -43,13 +64,17 @@ class ScrapCategoryController extends Controller
                
             }
         }
-        
+        return true;
     }
     public function SecondSubCategory(){
         set_time_limit(250);
         $category=FerstSubCatigory::all();
         foreach($category as $cat){
-            $res=shell_exec('C:/PYTHON/python.exe "d:/stage/Nouveau dossier/appscrap/app/Script_python/categories/script_subcategory.py" "' . $cat['url'] . '"');
+            $path_script=storage_path('Script_python/categories/script_subcategory.py');
+            if (!file_exists($path_script)) {
+                throw new \Exception("Python script not found at $path_script");
+            }
+            $res=shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $cat['url'] . '"');
             $results = json_decode($res, true);
             Log::info($results);
             if ($results !== null) {

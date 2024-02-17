@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
-import Search from "../ComponentDefault/Search";
+import Search from "../ComponentHome/Search";
 import Dropdown from "./Dropdown.jsx";
 
 const navigation = {
@@ -81,8 +81,9 @@ const Header = ({ onSearchResult }) => {
 
                                     <Dropdown.Content>
                                         {navigation.categories.map(
-                                            (category) => (
+                                            (category,index) => (
                                                 <Dropdown.Link
+                                                key={index}
                                                     href={route(
                                                         "category.show",
                                                         {

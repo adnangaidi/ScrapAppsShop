@@ -96,12 +96,21 @@ class HomeController extends Controller
         ]);
     }
     public function getAppsWithSubCategory($subcategory){
-        $appsCategories = App::where('subcategories',$subcategory)->get();
+        $appsCategories = App::where('subcategories',$subcategory)->orWhere('subcategories1',$subcategory)->get();
         Log::info($appsCategories);
         $apps=App::all();
         return Inertia::render('PageCategory', [
             'apps' => $apps,
             'appsCategories'=>$appsCategories
+        ]);
+    }
+    public function getAppsDeveloper($developer){
+        $appsDeveloper = App::where('developer',$developer)->get();
+        Log::info($appsDeveloper);
+        $apps=App::all();
+        return Inertia::render('PageCategory', [
+            'apps' => $apps,
+            'appsCategories'=>$appsDeveloper
         ]);
     }
     public function contact(){

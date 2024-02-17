@@ -14,7 +14,14 @@ export default function App_info({ app, categorie, url }) {
                         />
                     </div>
                     <div className="max-w-xs md:max-w-2xl">
-                        <h4 className="text-lg font-bold">{app.name}</h4>
+                        <h3 className="text-lg font-bold">{app.name}</h3>
+                        <p className="text-lg font-semibold">
+                        Developer:
+                        <Link href={route("developer.show",{developer:app.developer.replace(
+                                                    /\/\//g,
+                                                    "-"
+                                                )})} className="underline decoration-2 hover:no-underline hover:text-blue-500">{app.developer}</Link>
+                        </p>
                         <p className="mt-1">
                             {app.nb_review} <span>reviews</span>
                         </p>
@@ -22,10 +29,7 @@ export default function App_info({ app, categorie, url }) {
                 </div>
                 <div className="mt-4">
                     <ul className="flex justify-around">
-                        {/* {categorie && categorie.map((cat) =>
-                            cat != null ? ( */}
                                 <li
-
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
                                     <Link href={route("category.show",{category:categorie[0].replace(
@@ -34,7 +38,6 @@ export default function App_info({ app, categorie, url }) {
                                                 )})}>{categorie[0]}</Link>
                                 </li>
                                 <li
-
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
                                     <Link href={route("subcategory.show",{subcategory:categorie[1].replace(
@@ -43,12 +46,12 @@ export default function App_info({ app, categorie, url }) {
                                                 )})}>{categorie[1]}</Link>
                                 </li>
                                 {
-                                    categorie[3] != null?(
+                                    categorie[2] != null?(
                                         <li
 
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
-                                    <Link href={route("category.show",{category:categorie[2].replace(
+                                    <Link href={route("subcategory.show",{subcategory:categorie[2].replace(
                                                     /\/\//g,
                                                     "-"
                                                 )})}>{categorie[2]}</Link>

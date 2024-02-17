@@ -20,6 +20,5 @@ use App\Http\Controllers\ScrapController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/test', [ListAppsController::class,'CompileApps']);
-Route::get('/delete',[ScrapController::class,'deleteE']);
+
 

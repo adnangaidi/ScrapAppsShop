@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AppCard from "../Components/ComponentDefault/App_Card";
+import AppCard from "../Components/ComponentHome/App_Card";
 
 export default function SearchPage({ result, apps }) {
     const [search, setSearch] = useState("");

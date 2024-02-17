@@ -1,4 +1,3 @@
-import logo from "@/assets/logo.png";
 import Carsoule from "./CarsoulImg"
 export default function Desc_App({description,role,media}) {
 
