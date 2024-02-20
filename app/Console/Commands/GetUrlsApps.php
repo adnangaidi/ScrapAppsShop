@@ -49,59 +49,49 @@ class GetUrlsApps extends Command
                     $nameCategoryParent = CategoryParent::where('cp_id', $second['cp_id'])->value('name');
                     $nameFirstSub = FerstSubCatigory::where('fsc_id', $second['fsc_id'])->value('name');
                     $nameSecondSub = SecondSubCatigory::where('ssc_id', $second['ssc_id'])->value('name');
-                    $url = $second['url'];
-                    $path_script = storage_path('Script_python/categories/main.py');
-                    
-                    if (!file_exists($path_script)) {
-                        throw new \Exception("Python script not found at $path_script");
-                    }
-                    $res = shell_exec('C:/PYTHON/python.exe "' . $path_script . '" "' . $url . '"');
-                    $results = json_decode($res, true);
 
-                    if ($results !== null) {
-                        for ($i = 0; $i < count($results); $i++) {
-                            $url_apps = new list_apps();
-                            $url_apps->url = $results[$i];
-                            $url_apps->categories = $nameCategoryParent;
-                            $url_apps->subcategories = $nameFirstSub;
-                            $url_apps->subcategories1 = $nameSecondSub;
-                            $url_apps->status = 'not scraped';
-                            $url_apps->save();
-                            Log::info($url_apps);
-                        }
-                    }
+                    $this->list_apps($second['url'], $nameCategoryParent, $nameFirstSub, $nameSecondSub);
                 }
-            } 
-            else {
+            } else {
 
                 $category = FerstSubCatigory::where('fsc_id', $sub)->first();
                 $nameCategoryParent = CategoryParent::where('cp_id', $category->cp_id)->value('name');
                 $nameFirstSub = FerstSubCatigory::where('fsc_id', $category->fsc_id)->value('name');
                 if ($category) {
-                    $url = $category->url;
-                    $path_script = storage_path('Script_python/categories/main.py');
-
-                    if (!file_exists($path_script)) {
-                        throw new \Exception("Python script not found at $path_script");
-                    }
-                    $res = shell_exec('C:/PYTHON/python.exe "' . $path_script . '" "' . $url . '"');
-                    $results = json_decode($res, true);
-
-                    if ($results !== null) {
-                        for ($i = 0; $i < count($results); $i++) {
-                            $url_apps = new list_apps();
-                            $url_apps->url = $results[$i];
-                            $url_apps->categories = $nameCategoryParent;
-                            $url_apps->subcategories = $nameFirstSub;
-                            $url_apps->status = 'not scraped';
-                            $url_apps->save();
-                            Log::info($url_apps);
-                        }
-                    }
+                    $this->list_apps($category->url, $nameCategoryParent, $nameFirstSub, null);
                 }
             }
         }
 
         return response()->json(['the list apps is save with successuful', 200]);
+    }
+
+
+
+
+    public function list_apps($url, $CategoryParent, $FirstSubCategory, $secondeSubCategory)
+    {
+        $path_script = storage_path('Script_python/categories/main.py');
+
+        if (!file_exists($path_script)) {
+            throw new \Exception("Python script not found at $path_script");
+        }
+        $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
+        $results = json_decode($res, true);
+
+        if ($results !== null) {
+            for ($i = 0; $i < count($results); $i++) {
+                $url_apps = new list_apps();
+                $url_apps->url = $results[$i];
+                $url_apps->categories = $CategoryParent;
+                $url_apps->subcategories = $FirstSubCategory;
+
+                if ($secondeSubCategory) {
+                    $url_apps->subcategories1 = $secondeSubCategory;
+                }
+                $url_apps->status = 'not scraped';
+                $url_apps->save();
+            }
+        }
     }
 }

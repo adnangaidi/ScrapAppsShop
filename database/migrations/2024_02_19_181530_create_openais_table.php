@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tarifs', function (Blueprint $table) {
-            $table->id('tarif_id');
-            $table->string('name')->nullable();
-            $table->string('price')->nullable();
-            $table->unsignedBigInteger('app_id');
+        Schema::create('openais', function (Blueprint $table) {
+            $table->id();
+            $table->text('response');
+            $table->unsignedBigInteger('app_id')->nullable();
             $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tarifs');
+        Schema::dropIfExists('openais');
     }
 };

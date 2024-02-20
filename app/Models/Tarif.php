@@ -14,7 +14,6 @@ class Tarif extends Model
         'tarif_id',
         'name',
         'price', 
-        'plan',
         'app_id'
     ];
 

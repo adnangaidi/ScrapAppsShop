@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('desc_id');
             $table->string('title');
             $table->text('body')->nullable();
-            $table->text('role')->nullable();
             $table->unsignedBigInteger('app_id');
             $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();

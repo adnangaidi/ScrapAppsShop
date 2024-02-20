@@ -14,7 +14,6 @@ class Description extends Model
         'desc_id',
         'title',
         'body',
-        'role',
         'app_id'
     ];
 

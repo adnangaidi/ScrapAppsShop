@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\ChatgptController;
 use App\Http\Controllers\contactController;
 use App\Http\Controllers\HomeController;
 
@@ -18,3 +18,4 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/{slug}', 'getApp')->name('app.show');
 });
 Route::post('/contact', [contactController::class, 'send'])->name('contact.post');
+

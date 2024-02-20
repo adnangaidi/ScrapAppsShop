@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\App;
 use App\Models\Description;
-use Illuminate\Http\Request;
 use Exception;
 use App\Http\Resources\MediaResource;
 use App\Models\Plans;
@@ -51,16 +50,15 @@ class ScrapController extends Controller
     public function info_app($url, $categories, $subcategories, $subcategories1, $id)
     {
         try {
-            $path_script=storage_path('Script_python/info_app/script_info_app.py');
+            $path_script = storage_path('Script_python/info_app/script_info_app.py');
             if (!file_exists($path_script)) {
                 throw new \Exception("Python script not found at $path_script");
             }
 
-            $res = shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
+            $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
             $result = json_decode($res, true);
 
             if ($result) {
-                Log::info("result", $result);
                 $info_app = new App();
                 $info_app->name   = $result['name_app'];
                 $this->name = $result['name_app'];
@@ -86,19 +84,11 @@ class ScrapController extends Controller
                 $info_app->save();
                 $id = $info_app->app_id;
 
-                Log::info('id:', ['id' => $id]);
-
                 $file = DB::table('media')->where('model_id', $id)->where('collection_name', 'logo_app')->first();
 
                 if ($file) {
-                    $idfile = $file->id;
-                    $namefile = $file->file_name;
-                    $path = "media/{$idfile}/{$namefile}";
-                    Log::info($path);
-
+                    $path = "media/{$file->id}/{$file->file_name}";
                     $info_app->logo = $path;
-                } else {
-                    Log::info('File not found for model_id:', ['model_id' => $id]);
                 }
                 $this->image_app($url, $info_app);
                 $info_app->save();
@@ -117,31 +107,22 @@ class ScrapController extends Controller
     public function image_app($url, $info_app)
     {
         try {
-            $path_script=storage_path('Script_python/info_app/script_image.py');
+            $path_script = storage_path('Script_python/info_app/script_image.py');
             if (!file_exists($path_script)) {
                 throw new \Exception("Python script not found at $path_script");
             }
-            $res = shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
+            $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
             $result = json_decode($res, true);
             // check the url is from youtube, *********the index 0 is for src youtube*********
             if ($result) {
                 for ($i = 0; $i < count($result); $i++) {
-                    if ($i == 0) {
-                        if (strpos($result[$i], 'youtube-nocookie.com')) {
-                            $info_app->video = $result[$i];
-                        } else {
-                            $media = collect($result[$i])
-                                ->map(function ($url_logo) use ($info_app) {
-                                    return $info_app->addMediaFromUrl($url_logo)->toMediaCollection('media');
-                                });
-                            MediaResource::collection($media);
-                        }
+                    if (strpos($result[$i], 'youtube-nocookie.com')) {
+                        $info_app->video = $result[$i];
                     } else {
                         $media = collect($result[$i])
                             ->map(function ($url_logo) use ($info_app) {
                                 return $info_app->addMediaFromUrl($url_logo)->toMediaCollection('media');
                             });
-
                         MediaResource::collection($media);
                     }
                 }
@@ -161,11 +142,11 @@ class ScrapController extends Controller
     public function desc_app($url, $app_id)
     {
         try {
-            $path_script=storage_path('Script_python/info_app/script_desc_app.py');
+            $path_script = storage_path('Script_python/info_app/script_desc_app.py');
             if (!file_exists($path_script)) {
                 throw new \Exception("Python script not found at $path_script");
             }
-            $res = shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
+            $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
             $result = json_decode($res, true);
             $desc_app = new Description();
             $desc_app->title = $result['title'];
@@ -173,13 +154,12 @@ class ScrapController extends Controller
             $desc_app->app_id = $app_id;
             $desc_app->save();
             $id = $desc_app->id;
-            Log::info("id descrip", [$id]);
+
             foreach ($result['role'] as $roleName) {
                 $role = new Roles();
                 $role->name = $roleName;
                 $role->desc_id = $id;
                 $role->save();
-                Log::info("role", [$roleName]);
             }
             // Exclude Roles model from JSON serialization
             $desc_app->setHidden(['roles']);
@@ -195,11 +175,11 @@ class ScrapController extends Controller
     public function tarif_app($url, $app_id)
     {
         try {
-            $path_script=storage_path('Script_python/info_app/script_tarif_app.py');
+            $path_script = storage_path('Script_python/info_app/script_tarif_app.py');
             if (!file_exists($path_script)) {
                 throw new \Exception("Python script not found at $path_script");
             }
-            $res = shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
+            $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
             $result = json_decode($res, true);
             if ($result) {
                 for ($i = 0; $i < count($result); $i++) {
@@ -209,7 +189,7 @@ class ScrapController extends Controller
                     $tarif_app->app_id = $app_id;
                     $tarif_app->save();
                     $id = $tarif_app->id;
-                    Log::info("id tarfif", [$id]);
+
                     foreach ($result[$i]['plans'] as $planName) {
                         Log::info("name plan", [$planName]);
                         $plan = new Plans();
@@ -221,9 +201,9 @@ class ScrapController extends Controller
                     $tarif_app->setHidden(['plan']);
                 }
             } else {
-                Log::info("tarifs none.");
+
                 return response()->json([
-                    'message' => 'tarifs none.',
+                    'message' => 'price none.',
                 ], 400);
             }
         } catch (Exception $e) {
@@ -231,18 +211,18 @@ class ScrapController extends Controller
         }
 
         return response()->json([
-            'message' => 'Tarif saved successfully.',
+            'message' => 'Price saved successfully.',
         ], 200);
     }
 
     public function review_app($url, $app_id)
     {
         try {
-            $path_script=storage_path('Script_python/info_app/script_reviews.py');
+            $path_script = storage_path('Script_python/info_app/script_reviews.py');
             if (!file_exists($path_script)) {
                 throw new \Exception("Python script not found at $path_script");
             }
-            $res = shell_exec('C:/PYTHON/python.exe "'.$path_script.'" "' . $url . '"');
+            $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
             $result = json_decode($res, true);
             if ($result) {
                 for ($i = 0; $i < count($result); $i++) {
@@ -267,17 +247,6 @@ class ScrapController extends Controller
         ], 200);
     }
 
-    public function deleteE()
-    {
-        // DB::table('media')->truncate();
-        // DB::table('apps')->truncate();
-        // DB::table('tarifs')->truncate();
-        // DB::table('descriptions')->truncate();
-        DB::table('list_apps')->truncate();
-        // DB::table('reviews')->truncate();
-        // DB::table('category_parents')->truncate();
-        return 'data delete with success';
-    }
     public function removeQueryParams($url)
     {
         $parsedUrl = parse_url($url);
@@ -286,7 +255,6 @@ class ScrapController extends Controller
             $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
             $host     = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
             $path     = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-
             return $scheme . $host . $path;
         }
 

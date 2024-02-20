@@ -33,19 +33,24 @@ class App extends Model implements HasMedia
     public function listapps():BelongsTo{
         return $this(list_apps::class);
     }
-    public function decription(): HasMany
+    public function decription(): HasOne
     {
-        return $this->hasMany(Description::class);
+        return $this->hasOne(Description::class);
+    }
+
+    public function tarif(): HasOne
+    {
+        return $this->hasOne(Tarif::class);
     }
 
     public function review(): HasMany
     {
         return $this->HasMany(Review::class);
     }
-
-    public function tarif(): HasMany
+    
+    public function openai(): HasOne
     {
-        return $this->hasMany(Tarif::class);
+        return $this->hasOne(Openai::class);
     }
     
 }
