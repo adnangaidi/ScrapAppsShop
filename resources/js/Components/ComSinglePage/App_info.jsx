@@ -32,29 +32,29 @@ export default function App_info({ app, categorie, url }) {
                                 <li
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
-                                    <Link href={route("category.show",{category:categorie[0].replace(
+                                    <Link href={route("category.show",{category:app.categories.replace(
                                                     /\/\//g,
                                                     "-"
-                                                )})}>{categorie[0]}</Link>
+                                                )})}>{app.categories}</Link>
                                 </li>
                                 <li
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
-                                    <Link href={route("subcategory.show",{subcategory:categorie[1].replace(
+                                    <Link href={route("subcategory.show",{subcategory:app.subcategories.replace(
                                                     /\/\//g,
                                                     "-"
-                                                )})}>{categorie[1]}</Link>
+                                                )})}>{app.subcategories}</Link>
                                 </li>
                                 {
-                                    categorie[2] != null?(
+                                    app.subcategories1 != null?(
                                         <li
 
                                     className="mx-2 md:mx-4 px-2 md:px-4 py-1 cursor-pointer hover:bg-gray-300 h-8 md:h-10 w-auto self-center rounded-xl font-semibold text-sm md:text-base"
                                 >
-                                    <Link href={route("subcategory.show",{subcategory:categorie[2].replace(
+                                    <Link href={route("subcategory.show",{subcategory:app.subcategories1.replace(
                                                     /\/\//g,
                                                     "-"
-                                                )})}>{categorie[2]}</Link>
+                                                )})}>{app.subcategories1}</Link>
                                 </li>
                                     ):''
                                 }

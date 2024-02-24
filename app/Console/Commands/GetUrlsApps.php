@@ -5,20 +5,25 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Models\list_apps;
-use App\Models\CategoryParent;
 use App\Models\FerstSubCatigory;
 use App\Models\SecondSubCatigory;
-use Illuminate\Support\Facades\Log;
+use App\Traits\ScrapTrait;
 
 
 class GetUrlsApps extends Command
 {
+    private $scrapTrait;
+    public function __construct(ScrapTrait $scrapTrait)
+    {
+        parent::__construct();
+        $this->scrapTrait = $scrapTrait;
+    }
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'apps:getUrls';
+    protected $signature = 'apps:Link';
 
     /**
      * The console command description.
@@ -34,51 +39,48 @@ class GetUrlsApps extends Command
     {
         set_time_limit(0);
 
-        $subcategories = FerstSubCatigory::pluck('fsc_id')->toArray();
+        $subcategories = FerstSubCatigory::getSubCategories();
 
-        $secondSubCategories = SecondSubCatigory::pluck('fsc_id')->toArray();
+        $secondSubCategories = SecondSubCatigory::getSubCategories();;
 
         foreach ($subcategories as $sub) {
-
             if (in_array($sub, $secondSubCategories)) {
-
-                $seconds = SecondSubCatigory::where('fsc_id', $sub)->get();
-
-                foreach ($seconds as $second) {
-
-                    $nameCategoryParent = CategoryParent::where('cp_id', $second['cp_id'])->value('name');
-                    $nameFirstSub = FerstSubCatigory::where('fsc_id', $second['fsc_id'])->value('name');
-                    $nameSecondSub = SecondSubCatigory::where('ssc_id', $second['ssc_id'])->value('name');
-
-                    $this->list_apps($second['url'], $nameCategoryParent, $nameFirstSub, $nameSecondSub);
-                }
+                $this->handleSecondSubCategories($sub);
             } else {
-
-                $category = FerstSubCatigory::where('fsc_id', $sub)->first();
-                $nameCategoryParent = CategoryParent::where('cp_id', $category->cp_id)->value('name');
-                $nameFirstSub = FerstSubCatigory::where('fsc_id', $category->fsc_id)->value('name');
-                if ($category) {
-                    $this->list_apps($category->url, $nameCategoryParent, $nameFirstSub, null);
-                }
+                $this->handleFirstSubCategory($sub);
             }
         }
 
-        return response()->json(['the list apps is save with successuful', 200]);
+        $this->info('all apps have url');
     }
 
+    private function handleSecondSubCategories($sub)
+    {
+        $seconds = SecondSubCatigory::getByFscId($sub);;
 
+        foreach ($seconds as $second) {
+            $this->handleSubCategory($second);
+        }
+    }
 
+    private function handleFirstSubCategory($sub)
+    {
+        $category = FerstSubCatigory::getByFscId($sub);
+
+        if ($category) {
+            $this->handleSubCategory($category);
+        }
+    }
+
+    private function handleSubCategory($category)
+    {
+        $categoryInfo = SecondSubCatigory::handle($category);
+        $this->list_apps($category->url, $categoryInfo['nameCategoryParent'], $categoryInfo['nameFirstSub'], $categoryInfo['nameSecondSub']);
+    }
 
     public function list_apps($url, $CategoryParent, $FirstSubCategory, $secondeSubCategory)
     {
-        $path_script = storage_path('Script_python/categories/main.py');
-
-        if (!file_exists($path_script)) {
-            throw new \Exception("Python script not found at $path_script");
-        }
-        $res = shell_exec(env("PYTHON_PATH") . '"' . $path_script . '" "' . $url . '"');
-        $results = json_decode($res, true);
-
+        $results = $this->scrapTrait->executePythonScript('Script_python/categories/main.py', $url);
         if ($results !== null) {
             for ($i = 0; $i < count($results); $i++) {
                 $url_apps = new list_apps();

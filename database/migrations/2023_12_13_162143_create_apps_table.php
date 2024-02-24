@@ -17,16 +17,19 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('video')->nullable();
             $table->string('developer')->nullable();
-            $table->string('nb_review')->nullable();
+            $table->double('nb_review')->nullable();
             $table->string('date_created')->nullable();
             $table->string('langue')->nullable();
             $table->string('categories')->nullable();
             $table->string('subcategories')->nullable();
             $table->string('subcategories1')->nullable();
             $table->string('slug')->nullable();
+            $table->string('title')->nullable();
+            $table->text('body')->nullable();
             $table->unsignedBigInteger('id')->nullable();
             $table->foreign('id')->references('id')->on('list_apps')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 

@@ -19,7 +19,21 @@ class list_apps extends Model
         'subcategories1',
         'status'
     ];
+    protected static function getAppUrl($id)
+    {
+        return static::where('id', $id)->get('url');
+    }
+
+    public function getNotScrapedAppsByCategory($category)
+    {
+        return $this->where('status', 'not scraped')
+                    ->where('categories', $category)
+                    ->limit(10)
+                    ->get();
+    }
+
     public function apps():HasOne{
      return $this->hasOne(App::class);
     }
+  
 }

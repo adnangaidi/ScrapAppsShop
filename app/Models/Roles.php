@@ -8,15 +8,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Roles extends Model
 {
-    use HasFactory;
-    protected $table="roles";
-    protected $fillable = [
-       'id',
-       'name',
-       'desc_id'
-    ];
+   use HasFactory;
+   protected $table = "roles";
+   protected $fillable = [
+      'id',
+      'name',
+      'desc_id'
+   ];
 
-    public function Role():BelongsTo{
-       return $this->belongsTo(Description::class);
-    }
+   protected static function getRoles($appId)
+   {
+      return static::where('app_id', $appId)->pluck('name')->toArray();
+   }
+
+
+
+
+
+
+   public function Role(): BelongsTo
+   {
+      return $this->belongsTo(App::class);
+   }
 }

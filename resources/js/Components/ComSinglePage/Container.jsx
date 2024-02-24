@@ -5,15 +5,15 @@ import Desc_App from "./Desc_App.jsx";
 import Pricing from "./Pricing.jsx";
 import PrimaryButton from "@/Components/shared/PrimaryButton";
 
-export default function Container({app,categorie,description,role,price,url,media}) {
+export default function Container({app,role,price,url,media}) {
     return (
         <div className="bg-gray-50"> 
             <ul role="list"  >
                 <li className="py-10 px-20 mx-auto">
-                    <App_info app={app} categorie={categorie} url={url}/>
+                    <App_info app={app}  url={url}/>
                 </li>
                 <li className="py-4 mx-auto">
-                    <Desc_App  role={role} description={description} media={media}/>
+                    <Desc_App  title={app.title} body={app.body} role={role} media={media}/>
                 </li>
                 <li className="py-4 mx-auto">
                     {price && price.length != 0 ? <Pricing price={price} />: ''

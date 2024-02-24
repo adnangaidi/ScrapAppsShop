@@ -24,4 +24,25 @@ class SecondSubCatigory extends Model
     {
         return $this->belongsTo(FerstSubCatigory::class,'fsc_id');
     }
+    public static function getSubCategories()
+    {
+        return static::pluck('fsc_id')->toArray();
+    }
+    public static function getByFscId($fscId)
+    {
+        return static::where('fsc_id', $fscId)->get();
+    }
+
+    public static function handle($category)
+    {
+        $nameCategoryParent = CategoryParent::getCategoryNameById($category->cp_id);
+        $nameFirstSub = FerstSubCatigory::getCategoryNameById($category->fsc_id);
+        $nameSecondSub = $category instanceof SecondSubCatigory ? SecondSubCatigory::where('ssc_id', $category->ssc_id)->value('name') : null;
+
+        return [
+            'nameCategoryParent' => $nameCategoryParent,
+            'nameFirstSub' => $nameFirstSub,
+            'nameSecondSub' => $nameSecondSub,
+        ];
+    }
 }

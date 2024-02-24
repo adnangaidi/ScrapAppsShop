@@ -2,11 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\ScrapCategoryController;
+
+use App\Services\ScrapCategoriesService;
 use Illuminate\Console\Command;
 
 class GetCategories extends Command
 {
+    protected $categoryService;
+    public function __construct(ScrapCategoriesService $category){
+        parent::__construct();
+       $this->categoryService=$category;
+    }
+
     /**
      * The name and signature of the console command.
      *
@@ -26,15 +33,13 @@ class GetCategories extends Command
      */
     public function handle()
     {
-
-        $controller = app(ScrapCategoryController::class);
-        $category = $controller->CategoryParent();
+        $category = $this->categoryService->CategoryParent();
         if ($category != false) {
-            $subcategory = $controller->FirstSubCategory();
+            $subcategory = $this->categoryService->FirstSubCategory();
             if ($subcategory != false) {
-                $controller->SecondSubCategory();
+                $this->categoryService->SecondSubCategory();
             }
         }
-        return response()->json(['the categories is save with successuful', 200]);
+        $this->info('The categories have been saved successfully.');
     }
 }

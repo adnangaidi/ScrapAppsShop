@@ -9,17 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Plans extends Model
 {
     use HasFactory;
-    protected $table='plans';
+    protected $table = 'plans';
 
-    protected $fillable=[
+    protected $fillable = [
         'id',
         'name',
-        'tarif_id'
+        'price_id'
     ];
 
-    public function plan():BelongsTo
+    public static function getPlans($appId)
     {
-        return $this->belongsTo(Tarif::class);
+        return static::where('price_id', $appId)->pluck('name')->toArray();
     }
-     
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Price::class);
+    }
 }

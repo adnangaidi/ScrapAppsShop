@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('review_id');
             $table->string('store')->nullable();
             $table->string('contry')->nullable();
-            $table->string('nb_start')->nullable(); 
+            $table->integer('nb_start')->nullable(); 
             $table->string('content')->nullable(); 
             $table->string('date')->nullable();
             $table->string('used_period')->nullable();

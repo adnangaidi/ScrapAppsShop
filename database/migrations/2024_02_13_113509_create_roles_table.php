@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('desc_id')->nullable();
-            $table->foreign('desc_id')->references('desc_id')->on('descriptions')->onDelete('cascade');
+            $table->unsignedBigInteger('app_id')->nullable();
+            $table->foreign('app_id')->references('app_id')->on('apps')->onDelete('cascade');
             $table->timestamps();
         });
     }

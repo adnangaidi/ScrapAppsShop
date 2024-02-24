@@ -1,15 +1,15 @@
 import Carsoule from "./CarsoulImg"
-export default function Desc_App({description,role,media}) {
+export default function Desc_App({title,body,role,media}) {
 
   
   return (
    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-6 items-center">
      <div className="md:px-10 font-sans">
       <h1 className="text-center text-lg md:text-2xl lg:text-3xl font-bold my-10">
-        {description.title}
+        {title}
       </h1>
       <p className="text-sm md:text-base my-5 text-gray-600">
-        {description.body}
+        {body}
       </p>
       <div className="grid gap-4 text-gray-600">
        {

@@ -25,4 +25,8 @@ class CategoryParent extends Model
     {
         return $this->hasMany(SecondSubCatigory::class,'cp_id');
     }
+    public static function getCategoryNameById($categoryId)
+    {
+        return static::where('cp_id', $categoryId)->value('name');
+    }
 }

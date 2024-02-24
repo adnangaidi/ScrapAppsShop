@@ -81,4 +81,22 @@
   npm run dev
 ```
 
+### Now run The command To Start Scrapping
+
+1. Scrap Categories:
+
+    ```shell
+    php artisan app:Categories
+    ```
+
+1. Scrap Link of All apps :
+
+    ```shell
+    php artisan apps:Link
+    ```
+1. Scrap Apps apps :
+
+    ```shell
+    php artisan script:run
+    ```
 

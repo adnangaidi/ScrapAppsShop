@@ -29,4 +29,19 @@ class FerstSubCatigory extends Model
     {
         return $this->hasMany(FerstSubCatigory::class,'cat_par_id');
     }
+    public static function getSubCategories()
+    {
+        return static::pluck('fsc_id')->toArray();
+    }
+    public static function getByFscId($fscId)
+    {
+        return static::where('fsc_id', $fscId)->first();
+    }
+    public static function getCategoryNameById($categoryId)
+    {
+        return static::where('fsc_id', $categoryId)->value('name');
+    }
+
+
+
 }

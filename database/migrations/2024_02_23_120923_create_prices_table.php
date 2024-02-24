@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tarifs', function (Blueprint $table) {
-            $table->id('tarif_id');
+        Schema::dropIfExists('prices'); 
+        Schema::create('prices', function (Blueprint $table) {
+            $table->id('price_id');
             $table->string('name')->nullable();
             $table->string('price')->nullable();
             $table->unsignedBigInteger('app_id');
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tarifs');
+        Schema::dropIfExists('prices');
     }
 };

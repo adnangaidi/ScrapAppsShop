@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('tarif_id')->nullable();
-            $table->foreign('tarif_id')->references('tarif_id')->on('tarifs')->onDelete('cascade');
+            $table->unsignedBigInteger('price_id')->nullable();
+            $table->foreign('price_id')->references('price_id')->on('prices')->onDelete('cascade');
             $table->timestamps();
         });
     }
